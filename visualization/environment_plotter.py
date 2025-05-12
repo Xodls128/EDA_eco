@@ -1,8 +1,13 @@
+# visualization/environment_plotter.py
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
+
+import matplotlib.ticker as mtick #비율화를 그래프에 적용하기위한 라이브러리
+
 
 # 🔠 한글 폰트 설정 (Windows: 맑은 고딕 / macOS: AppleGothic)
 matplotlib.rcParams['font.family'] = 'Malgun Gothic'  # Windows
@@ -49,6 +54,11 @@ class EnvironmentPlotter:
         plt.title(title)
         plt.ylabel(ylabel)
         plt.xticks(rotation=90)
+
+         # ✅ 퍼센트 단위 처리 (예: 녹지비율, 재활용률 등)
+        if "비율" in column or "률" in column:
+            ax.yaxis.set_major_formatter(mtick.PercentFormatter(decimals=1))
+
 
         if ylim_min is not None:
             ymax = df_sorted[column].max() * 1.05

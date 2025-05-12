@@ -1,3 +1,5 @@
+#preprocess/waste_process.py
+
 import pandas as pd
 import numpy as np
 
@@ -28,7 +30,7 @@ class WasteProcessor:
         self.df["총처리량"] = pd.to_numeric(self.df["총처리량"], errors='coerce')
 
         # 재활용률 계산
-        self.df["재활용률"] = self.df["재활용량"] / self.df["총처리량"]
+        self.df["재활용률"] = self.df["재활용량"] / self.df["총처리량"] * 100
 
         # 자치구별 평균 계산
         df_grouped = self.df.groupby("자치구").agg({

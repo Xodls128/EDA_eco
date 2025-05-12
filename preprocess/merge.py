@@ -1,4 +1,7 @@
+# preprocess/merge.py
+
 import pandas as pd
+from data.area_data import district_area_dict
 
 class EnvironmentDataMerger:
     def __init__(self, df_air: pd.DataFrame, df_green: pd.DataFrame, df_waste: pd.DataFrame):
@@ -26,6 +29,11 @@ class EnvironmentDataMerger:
         df["종합순위"] = df[[
             "PM10_rank", "PM25_rank", "녹지_rank", "수거율_rank", "재활용률_rank"
         ]].mean(axis=1)
+
+        
+        # ✅ 면적 기반 비율 추가
+        df["자치구_전체면적"] = df["자치구"].map(district_area_dict)
+        df["녹지비율"] = (df["평균_녹지면적"] / df["자치구_전체면적"]) * 100
 
         self.df_merged = df
         return self
