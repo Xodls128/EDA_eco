@@ -2,6 +2,15 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib
+
+# 🔠 한글 폰트 설정 (Windows: 맑은 고딕 / macOS: AppleGothic)
+matplotlib.rcParams['font.family'] = 'Malgun Gothic'  # Windows
+# matplotlib.rcParams['font.family'] = 'AppleGothic'  # macOS
+
+# 깨진 한글 대체 문자 제거 (마이너스 깨짐 방지용)
+matplotlib.rcParams['axes.unicode_minus'] = False
+
 
 class EnvironmentPlotter:
     def __init__(self, df: pd.DataFrame, result_dir='./result'):
