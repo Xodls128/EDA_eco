@@ -31,4 +31,5 @@ class GreenAreaProcessor:
                 green_cols.append(f'{y}_녹지합')
 
         self.df['평균_녹지면적'] = self.df[green_cols].mean(axis=1)
+
         return self.df[['구분별(2)', '평균_녹지면적']].rename(columns={'구분별(2)': '자치구'})

@@ -24,22 +24,6 @@ class EnvironmentPlotter:
         os.makedirs(result_dir, exist_ok=True)
 
 
-    def plot_heatmap(self):
-        """
-        순위 컬럼 간의 스피어만 상관관계 히트맵
-        """
-        rank_cols = [col for col in self.df.columns if col.endswith('_rank')]
-        corr = self.df[rank_cols].corr(method='spearman')
-
-        plt.figure(figsize=(8, 6))
-        sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".2f")
-        plt.title("환경 순위 지표 간 상관관계")
-        plt.tight_layout()
-
-        path = os.path.join(self.result_dir, 'rank_heatmap.png')
-        plt.savefig(path)
-        plt.close()
-
 
     def plot_individual_bar(self, column: str, title: str, ylabel: str, palette: str, ylim_min: float = None, ascending=True):
         """
@@ -78,7 +62,8 @@ class EnvironmentPlotter:
             "PM25_avg",
             "녹지비율",
             "재활용률",
-            "평균_출산율"
+            "평균_출산율",
+            "공원율"
         ]
 
         df_corr = self.df[columns].corr(method="pearson")

@@ -8,6 +8,8 @@ from preprocess.merge import EnvironmentDataMerger
 from visualization.environment_plotter import EnvironmentPlotter
 from tabulate import tabulate
 from preprocess.birth_rate import BirthRateProcessor
+from preprocess.park_process import ParkAreaProcessor
+
 
 def main():
     print("📥 데이터 로딩 중...")
@@ -15,8 +17,8 @@ def main():
     df_air = loader.load_air_quality()
     df_green = loader.load_green_area()
     df_waste = loader.load_waste_data()
-    df_birth_raw = loader.load_birth_rate()  # ✅ 출산율 데이터 로딩
-    df_birth = BirthRateProcessor(df_birth_raw).clean_and_aggregate()  # ✅ 전처리 수행
+    df_birth_raw = loader.load_birth_rate()  
+    df_birth = BirthRateProcessor(df_birth_raw).clean_and_aggregate()  
 
 
 
@@ -24,19 +26,20 @@ def main():
     df_air_p = AirQualityProcessor(df_air).clean().compute_pm_avg()
     df_green_p = GreenAreaProcessor(df_green).filter_district_rows().compute_avg_green_area()
     df_waste_p = WasteProcessor(df_waste).clean_columns().compute_metrics()
+    df_park = ParkAreaProcessor(loader.load_park_area()).clean_and_aggregate()
 
     print("🔗 데이터 병합 및 순위화 중...")
     df_env_final = (
         EnvironmentDataMerger(df_air_p, df_green_p, df_waste_p)
         .merge()
-        .add_ranking()
-        .add_birth_rate(df_birth)  # ✅ 반드시 이 시점에 포함되어야 함
+        .add_green_ratio()
+        .add_birth_rate(df_birth)
+        .add_park_area(df_park)
         .get()
     )
 
     print("📈 시각화 이미지 생성 중...")
     plotter = EnvironmentPlotter(df_env_final)
-    plotter.plot_heatmap()
 
     # ✅ [변경] 각 지표별 개별 그래프 생성 (순위 막대그래프 제거됨)
     plotter.plot_individual_bar(
@@ -67,7 +70,7 @@ def main():
     plotter.plot_individual_bar(
         column="녹지비율",  # 🌳 녹지면적 비율
         title="서울시 자치구별 녹지면적 비율",
-        ylabel="녹지비율 (%)",
+        ylabel="녹지비율(%)",
         palette="Greens",
         ylim_min=0, 
         ascending=False  # 🔽 내림차순 정렬(큰값이 앞에오도록)
@@ -76,11 +79,21 @@ def main():
     plotter.plot_individual_bar(
         column="재활용률",  # ♻️ 재활용률 지표
         title="서울시 자치구별 재활용률",
-        ylabel="재활용률 (비율)",
+        ylabel="재활용률(%)",
         palette="Purples_d",
         ylim_min= 65,
         ascending=False  # 🔽 내림차순 정렬(큰값이 앞에오도록)
     )
+    
+    plotter.plot_individual_bar(
+    column="공원율",
+    title="서울시 자치구별 공원율",
+    ylabel="공원율(%)",
+    palette="Greens",
+    ylim_min=10,
+    ascending=False  # 높은 순부터
+    )
+
 
     plotter.plot_birth_correlation_heatmap()
 
