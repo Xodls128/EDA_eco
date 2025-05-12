@@ -41,11 +41,11 @@ class EnvironmentPlotter:
         plt.close()
 
 
-    def plot_individual_bar(self, column: str, title: str, ylabel: str, palette: str, ylim_min: float = None):
+    def plot_individual_bar(self, column: str, title: str, ylabel: str, palette: str, ylim_min: float = None, ascending=True):
         """
         자치구별 값 기준으로 정렬하여 개별 지표 막대 그래프 출력
         """
-        df_sorted = self.df.sort_values(by=column, ascending=True)
+        df_sorted = self.df.sort_values(by=column, ascending=ascending)
 
         plt.figure(figsize=(14, 6))
         ax = sns.barplot(data=df_sorted, x='자치구', y=column, palette=palette)
