@@ -37,6 +37,7 @@ class EnvironmentDataMerger:
 
         self.df_merged = df
         return self
+    
     def add_birth_rate(self, df_birth: pd.DataFrame):
         self.df_merged = self.df_merged.merge(df_birth, on="자치구", how="left")
         return self

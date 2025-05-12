@@ -20,5 +20,5 @@ class DataLoader:
         return pd.read_csv(path)
     # ✅ 추가: 출산율 불러오기
     def load_birth_rate(self):
-        return pd.read_csv(self.data_dir + '합계출산율+및+모의+연령별+출산율_20250512165606.csv')
-    
+        path = os.path.join(self.data_dir, '합계출산율+및+모의+연령별+출산율_20250512165606.csv')
+        return pd.read_csv(path)

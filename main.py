@@ -7,6 +7,7 @@ from preprocess.waste_process import WasteProcessor
 from preprocess.merge import EnvironmentDataMerger
 from visualization.environment_plotter import EnvironmentPlotter
 from tabulate import tabulate
+from preprocess.birth_rate import BirthRateProcessor
 
 def main():
     print("📥 데이터 로딩 중...")
@@ -14,6 +15,10 @@ def main():
     df_air = loader.load_air_quality()
     df_green = loader.load_green_area()
     df_waste = loader.load_waste_data()
+    df_birth_raw = loader.load_birth_rate()  # ✅ 출산율 데이터 로딩
+    df_birth = BirthRateProcessor(df_birth_raw).clean_and_aggregate()  # ✅ 전처리 수행
+
+
 
     print("🧹 전처리 수행 중...")
     df_air_p = AirQualityProcessor(df_air).clean().compute_pm_avg()
@@ -21,8 +26,13 @@ def main():
     df_waste_p = WasteProcessor(df_waste).clean_columns().compute_metrics()
 
     print("🔗 데이터 병합 및 순위화 중...")
-    merger = EnvironmentDataMerger(df_air_p, df_green_p, df_waste_p)
-    df_env_final = merger.merge().add_ranking().get()
+    df_env_final = (
+        EnvironmentDataMerger(df_air_p, df_green_p, df_waste_p)
+        .merge()
+        .add_ranking()
+        .add_birth_rate(df_birth)  # ✅ 반드시 이 시점에 포함되어야 함
+        .get()
+    )
 
     print("📈 시각화 이미지 생성 중...")
     plotter = EnvironmentPlotter(df_env_final)
@@ -68,6 +78,8 @@ def main():
         palette="Purples_d",
         ylim_min= 65
     )
+
+    plotter.plot_birth_correlation_heatmap()
 
     print("💾 결과 저장 중...")
     df_env_final.to_csv('./result/자치구_환경지표_종합순위.csv', index=False)
