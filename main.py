@@ -24,11 +24,40 @@ def main():
 
     print("📈 시각화 이미지 생성 중...")
     plotter = EnvironmentPlotter(df_env_final)
-    plotter.plot_comparative_bars()
-    plotter.plot_rank_bar("녹지_rank", "녹지면적 높은 자치구 Top 10", ascending=True)
-    plotter.plot_rank_bar("PM10_rank", "미세먼지 낮은 자치구 Top 10", ascending=True)
-    plotter.plot_rank_bar("재활용률_rank", "재활용률 높은 자치구 Top 10", ascending=True)
     plotter.plot_heatmap()
+
+    # ✅ [변경] 각 지표별 개별 그래프 생성 (순위 막대그래프 제거됨)
+    plotter.plot_individual_bar(
+        column="PM10_avg",  # 🔍 PM10 지표
+        title="서울시 자치구별 PM10 농도",
+        ylabel="PM10 (㎍/m³)",
+        palette="Blues_d",
+        ylim_min= 5  # 🔽 y축 최소값 조정으로 시각 강조
+    )
+
+    plotter.plot_individual_bar(
+        column="PM25_avg",  # 🔍 PM2.5 지표
+        title="서울시 자치구별 PM2.5 농도",
+        ylabel="PM2.5 (㎍/m³)",
+        palette="Blues",
+        ylim_min= 10
+    )
+
+    plotter.plot_individual_bar(
+        column="평균_녹지면적",  # 🌳 녹지면적 지표
+        title="서울시 자치구별 평균 녹지면적",
+        ylabel="녹지면적 (㎡)",
+        palette="Greens_d",
+        ylim_min= 5000
+    )
+
+    plotter.plot_individual_bar(
+        column="재활용률",  # ♻️ 재활용률 지표
+        title="서울시 자치구별 재활용률",
+        ylabel="재활용률 (비율)",
+        palette="Purples_d",
+        ylim_min= 0.6
+    )
 
     print("💾 결과 저장 중...")
     df_env_final.to_csv('./result/자치구_환경지표_종합순위.csv', index=False)
