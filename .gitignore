@@ -1,7 +1,29 @@
+# 🔒 Python 가상환경
 env/
+.venv/
+venv/
 
+# 🔄 캐시/컴파일 파일
 __pycache__/
-*.pyc
-.env
+*.py[cod]
+*.so
+*.pyd
+
+# 🧪 주피터 노트북 체크포인트 (만약 사용하는 경우)
+.ipynb_checkpoints/
+
+# 🧼 편집기 설정
+.vscode/
+.idea/
+*.swp
+
+# 📊 결과물 (재생성 가능)
+result/*.png
+result/*.csv
+
+# 🔧 시스템/OS 파일
 .DS_Store
-*.ipynb_checkpoints
+Thumbs.db
+
+# 🔒 환경변수 설정 (만약 사용하는 경우)
+.env
