@@ -41,7 +41,6 @@ class EnvironmentPlotter:
         plt.close()
 
 
-
     def plot_individual_bar(self, column: str, title: str, ylabel: str, palette: str, ylim_min: float = None):
         """
         자치구별 값 기준으로 정렬하여 개별 지표 막대 그래프 출력
@@ -67,4 +66,26 @@ class EnvironmentPlotter:
         plt.tight_layout()
         filename = f"{column}_자치구별.png"
         plt.savefig(os.path.join(self.result_dir, filename))
+        plt.close()
+
+    
+    def plot_birth_correlation_heatmap(self):
+        """
+        출산율과 주요 환경지표 간 상관관계 히트맵
+        """
+        columns = [
+            "PM10_avg",
+            "PM25_avg",
+            "녹지비율",
+            "재활용률",
+            "평균_출산율"
+        ]
+
+        df_corr = self.df[columns].corr(method="pearson")
+
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(df_corr, annot=True, cmap="coolwarm", fmt=".2f")
+        plt.title("출산율과 환경지표 간 상관관계 (2020~2023)")
+        plt.tight_layout()
+        plt.savefig(os.path.join(self.result_dir, "출산율_환경지표_상관관계_히트맵.png"))
         plt.close()
