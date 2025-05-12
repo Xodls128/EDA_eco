@@ -18,3 +18,7 @@ class DataLoader:
     def load_waste_data(self):
         path = os.path.join(self.data_dir, '쓰레기수거+현황_20250512111736.csv')
         return pd.read_csv(path)
+    # ✅ 추가: 출산율 불러오기
+    def load_birth_rate(self):
+        return pd.read_csv(self.data_dir + '합계출산율+및+모의+연령별+출산율_20250512165606.csv')
+    
