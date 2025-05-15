@@ -25,13 +25,14 @@ class EnvironmentPlotter:
 
 
 
-    def plot_individual_bar(self, column: str, title: str, ylabel: str, palette: str, ylim_min: float = None, ascending=True):
+    def plot_individual_bar(self, column: str, title: str, ylabel: str, ylim_min: float = None, ascending=True, highlight: list = ['중구','영등포구','송파구','성동구','동대문구','구로구'], highlight_color="red", base_color="green"):
         """
         자치구별 값 기준으로 정렬하여 개별 지표 막대 그래프 출력
         """
         df_sorted = self.df.sort_values(by=column, ascending=ascending)
 
         plt.figure(figsize=(14, 6))
+        palette = [base_color] * len(df_sorted)
         ax = sns.barplot(data=df_sorted, x='자치구', y=column, palette=palette)
 
         plt.title(title)
@@ -43,9 +44,16 @@ class EnvironmentPlotter:
             ax.yaxis.set_major_formatter(mtick.PercentFormatter(decimals=1))
 
 
-        if ylim_min is not None:
-            ymax = df_sorted[column].max() * 1.05
-            plt.ylim(ylim_min, ymax)
+        # ✅ x축 라벨 중 highlight에 해당하는 자치구만 빨간색
+        for label in ax.get_xticklabels():
+            if label.get_text() in highlight:
+                label.set_color(highlight_color)
+            else:
+                label.set_color("black")  # 기본색
+
+            if ylim_min is not None:
+                ymax = df_sorted[column].max() * 1.05
+                plt.ylim(ylim_min, ymax)
 
         plt.tight_layout()
         filename = f"{column}_자치구별.png"

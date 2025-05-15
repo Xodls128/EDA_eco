@@ -46,52 +46,32 @@ def main():
         column="PM10_avg",  # 🔍 PM10 지표
         title="서울시 자치구별 PM10 농도",
         ylabel="PM10 (㎍/m³)",
-        palette="Blues_d",
-        ylim_min= 6  # 🔽 y축 최소값 조정으로 시각 강조
+        ylim_min= 6, # 🔽 y축 최소값 조정으로 시각 강조
+        highlight=["강남구", "서초구"],
     )
 
     plotter.plot_individual_bar(
         column="PM25_avg",  # 🔍 PM2.5 지표
         title="서울시 자치구별 PM2.5 농도",
         ylabel="PM2.5 (㎍/m³)",
-        palette="Blues",
-        ylim_min= 11
+        ylim_min= 11,
     )
 
-    plotter.plot_individual_bar(
-        column="평균_녹지면적",  # 🌳 녹지면적 지표
-        title="서울시 자치구별 평균 녹지면적",
-        ylabel="녹지면적 (㎡)",
-        palette="Greens_d",
-        ylim_min= 5000,
-        ascending=False  # 🔽 내림차순 정렬(큰값이 앞에오도록)
-    )
-        # ✅ 자치구 전체 면적 대비 녹지 비율 시각화
-    plotter.plot_individual_bar(
-        column="녹지비율",  # 🌳 녹지면적 비율
-        title="서울시 자치구별 녹지면적 비율",
-        ylabel="녹지비율(%)",
-        palette="Greens",
-        ylim_min=0, 
-        ascending=False  # 🔽 내림차순 정렬(큰값이 앞에오도록)
-    )
 
     plotter.plot_individual_bar(
         column="재활용률",  # ♻️ 재활용률 지표
         title="서울시 자치구별 재활용률",
         ylabel="재활용률(%)",
-        palette="Purples_d",
         ylim_min= 65,
-        ascending=False  # 🔽 내림차순 정렬(큰값이 앞에오도록)
+        ascending=False,  # 🔽 내림차순 정렬(큰값이 앞에오도록)
     )
     
     plotter.plot_individual_bar(
-    column="공원율",
-    title="서울시 자치구별 공원율",
-    ylabel="공원율(%)",
-    palette="Greens",
-    ylim_min=10,
-    ascending=False  # 높은 순부터
+        column="공원율",
+        title="서울시 자치구별 공원율",
+        ylabel="공원율(%)",
+        ylim_min=10,
+        ascending=False,  # 높은 순부터
     )
 
 
